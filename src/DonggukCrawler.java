@@ -19,7 +19,7 @@ public class DonggukCrawler extends Crawler {
     //ID = "2014112102 ";
     //PW = "fishcreek1!";
     public Document document;
-
+    private String trashValue="시간/월화수목금토";
     public DonggukCrawler(final String userId, final String userPw, SFCallback onStart, SFCallback onConnect, SFCallback onFinish) {
         classList.clear();
         URL_AUTH = "https://eclass.dongguk.edu/User.do?cmd=loginUser"; // Login Link
@@ -80,6 +80,19 @@ public class DonggukCrawler extends Crawler {
                 .method(Connection.Method.POST)
                 .timeout(TIMEOUT)
                 .post();
+        Elements table=document.select("table.bbs-table01");
+        System.out.println(table.text());
 
+        for(Element trTags: table.select("tr")){
+            if(trTags.text().contains(trashValue)){
+                continue;
+            }
+           String rawtime = trTags.child(0).text();
+            for(int i=1;i<7;i++){
+                if(trTags.child(i).text() != " "){
+
+                }
+            }
+        }
     }
 }
