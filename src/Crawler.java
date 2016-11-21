@@ -25,6 +25,8 @@ public abstract class Crawler {
     protected String ID;
     protected String PW;
 
+    public boolean isVerified=false;
+
 
     protected static final int TIMEOUT = 15000;
 

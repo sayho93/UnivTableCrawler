@@ -36,6 +36,10 @@ public class DonggukCrawler extends Crawler {
         this.onFail = onFail;
     }
 
+    public void isVerified(SFCallback onConnect){       //로그인 시도시 실패나 성공에 따라 boolen isVerified 값 변화
+
+    }
+
     public void doInBackground() throws IOException{
         Connection.Response response= Jsoup.connect(URL_AUTH)
                 .followRedirects(true)
@@ -83,14 +87,46 @@ public class DonggukCrawler extends Crawler {
         Elements table=document.select("table.bbs-table01");
         System.out.println(table.text());
 
+        ArrayList<ClassInfo> clists = new ArrayList<>();
+        String tmpString;
+        int middleIndex=-1;
+        String className;
+        String locationString;
+
         for(Element trTags: table.select("tr")){
-            if(trTags.text().contains(trashValue)){
-                continue;
-            }
+
            String rawtime = trTags.child(0).text();
             for(int i=1;i<7;i++){
-                if(trTags.child(i).text() != " "){
+                if(!trashValue.contains(trTags.child(i).text())){
+                    if(trTags.child(i).text()!= " ") {
+                        tmpString = trTags.child(i).text();
+                        System.out.println("[tmpString:" + tmpString + "]");
+                        middleIndex = tmpString.indexOf("(");
+                        ClassInfo tmpClass = new ClassInfo();
+                        switch (i) {
+                            case 1:
+                                tmpClass.weekDay = 0;
+                                break;
+                            case 2:
+                                tmpClass.weekDay = 1;
+                                break;
+                            case 3:
+                                tmpClass.weekDay = 2;
+                                break;
+                            case 4:
+                                tmpClass.weekDay = 3;
+                                break;
+                            case 5:
+                                tmpClass.weekDay = 4;
+                                break;
+                            case 6:
+                                break;
+                        }
+                        tmpClass.title = tmpString.substring(0, middleIndex - 1);
+                        tmpClass.location = tmpString.substring(middleIndex, tmpString.length());
 
+                        System.out.println("title: " + tmpClass.title + "location: " + tmpClass.location + "weekday: " + tmpClass.weekDay);
+                    }
                 }
             }
         }
