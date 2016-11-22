@@ -4,10 +4,10 @@
 public class ClassInfo {
     public static final int NULLPTR = -1;
 
-    public String title = "강의 정보"; // title of Lecture
+    public String title = ""; // title of Lecture
 
-    public String location = "강의실 정보"; // Location of Lecture
-    public String rawtime = "시간 정보"; // time in raw state
+    public String location = ""; // Location of Lecture
+    public String rawtime = ""; // time in raw state
     public int weekDay = NULLPTR;
     public int startHour = NULLPTR;
     public int startMin = NULLPTR;

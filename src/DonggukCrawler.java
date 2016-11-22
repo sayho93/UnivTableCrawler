@@ -58,8 +58,8 @@ public class DonggukCrawler extends Crawler {
                 .post();
         Elements name=document.select("span.user");
         userName=name.text();
-        System.out.println(userName);
-
+        //System.out.println(userName);
+        //사용자 이름 로그
         document=Jsoup.connect(URL_HAND)
                 .followRedirects(true)
                 .cookies(response.cookies())
@@ -72,10 +72,13 @@ public class DonggukCrawler extends Crawler {
             handList.add(new HandInfo(trTags.child(0).text(), trTags.child(1).text(), trTags.child(2).text(),
                     trTags.child(3).text(), trTags.child(4).text(), trTags.child(5).text(), trTags.child(6).text()));
         }
+        /*
         for(HandInfo node:handList){
             System.out.println(node.no+" "+node.subject+" "+node.name+" "+node.date+" "+node.handin+" "+
                     node.open+" "+node.score);
         }
+        과제 리스트 로그
+        */
 
         document=Jsoup.connect(URL_TIME)
                 .followRedirects(true)
@@ -85,50 +88,121 @@ public class DonggukCrawler extends Crawler {
                 .timeout(TIMEOUT)
                 .post();
         Elements table=document.select("table.bbs-table01");
-        System.out.println(table.text());
+        //System.out.println(table.text());
 
-        ArrayList<ClassInfo> clists = new ArrayList<>();
+        ClassInfo Clist[][]=new ClassInfo[32][6];
         String tmpString;
         int middleIndex=-1;
-        String className;
-        String locationString;
+        int lineIndicator=-1;
+        String startRawtime="";
+        String endRawtime="";
+        int swungDashIndicator;
+        int ScolonIndicator=-1;
+        int EcolonIndicator=-1;
 
         for(Element trTags: table.select("tr")){
+            String rawtime = trTags.child(0).text();
 
-           String rawtime = trTags.child(0).text();
+            if(!trashValue.contains(trTags.child(0).text())){
+                //System.out.println("rawTime: "+rawtime);
+                //rawtime 로그
+                swungDashIndicator=rawtime.indexOf("~");
+                startRawtime=rawtime.substring(0, swungDashIndicator-1);
+                endRawtime=rawtime.substring(swungDashIndicator+2, rawtime.length());
+                ScolonIndicator=startRawtime.indexOf(":");
+                EcolonIndicator=endRawtime.indexOf(":");
+                /*
+                System.out.println("startRawtime: "+startRawtime);
+                System.out.println("endRawtime: "+endRawtime);
+                System.out.println("Scolon: "+ScolonIndicator+"Ecolon: "+EcolonIndicator);
+                시간 문자열처리 로그
+                */
+            }
+
             for(int i=1;i<7;i++){
                 if(!trashValue.contains(trTags.child(i).text())){
-                    if(trTags.child(i).text()!= " ") {
-                        tmpString = trTags.child(i).text();
-                        System.out.println("[tmpString:" + tmpString + "]");
-                        middleIndex = tmpString.indexOf("(");
-                        ClassInfo tmpClass = new ClassInfo();
-                        switch (i) {
-                            case 1:
-                                tmpClass.weekDay = 0;
-                                break;
-                            case 2:
-                                tmpClass.weekDay = 1;
-                                break;
-                            case 3:
-                                tmpClass.weekDay = 2;
-                                break;
-                            case 4:
-                                tmpClass.weekDay = 3;
-                                break;
-                            case 5:
-                                tmpClass.weekDay = 4;
-                                break;
-                            case 6:
-                                break;
-                        }
+                    tmpString = trTags.child(i).text();
+                    //System.out.println("[tmpString:" + tmpString + "]");
+                    middleIndex = tmpString.indexOf("(");
+                    ClassInfo tmpClass = new ClassInfo();
+                    tmpClass.startHour=Integer.parseInt(startRawtime.substring(0, ScolonIndicator));
+                    tmpClass.startMin=Integer.parseInt(startRawtime.substring(ScolonIndicator+1, startRawtime.length()));
+                    tmpClass.endHour=Integer.parseInt(endRawtime.substring(0, EcolonIndicator));
+                    tmpClass.endMin=Integer.parseInt(endRawtime.substring(EcolonIndicator+1, endRawtime.length()));
+                    //System.out.println("time: "+tmpClass.startHour+":"+tmpClass.startMin+"  "+tmpClass.endHour+":"+tmpClass.endMin);
+                    //시간 결과값 로그
+                    if(middleIndex != -1){
                         tmpClass.title = tmpString.substring(0, middleIndex - 1);
                         tmpClass.location = tmpString.substring(middleIndex, tmpString.length());
+                    }
+                    switch (i) {
+                        case 1:
+                            tmpClass.weekDay = 0;
+                            break;
+                        case 2:
+                            tmpClass.weekDay = 1;
+                            break;
+                        case 3:
+                            tmpClass.weekDay = 2;
+                            break;
+                        case 4:
+                            tmpClass.weekDay = 3;
+                            break;
+                        case 5:
+                            tmpClass.weekDay = 4;
+                            break;
+                        case 6:
+                            tmpClass.weekDay=5;
+                            break;
+                    }
+                    Clist[lineIndicator][i-1]=tmpClass;
+                    //System.out.println("Line number: "+lineIndicator);
+                    //System.out.println("title: " + tmpClass.title + "location: " + tmpClass.location + "weekday: " + tmpClass.weekDay);
+                    //System.out.println();
+                    //라인 넘버, 객체 멤버 로그
+                }
+            }
+            lineIndicator++;
+        }
+        /*
+        Clist 내용 로그
+        for(int i=0;i<32;i++){
+            for(int j=0;j<6;j++){
+                System.out.print(" [ "+Clist[i][j].title+" | "+Clist[i][j].location+" | "+Clist[i][j].weekDay+" | "+Clist[i][j].startHour+":"+Clist[i][j].startMin+" | "+Clist[i][j].endHour+":"+Clist[i][j].endMin+" ] ");
+            }
+            System.out.println();
+        }
+        */
+        String tmpTitle="";
+        int tmpStarthMin=-1;
+        int tmpStartm=-1;
+        int tmpEndhMax=-1;
+        int tmpEndm=-1;
 
-                        System.out.println("title: " + tmpClass.title + "location: " + tmpClass.location + "weekday: " + tmpClass.weekDay);
+        for(int i=0;i<6;i++){
+            for(int j=0;j<32;j++){
+                if(Clist[j][i].title != "" && Clist[j][i].title != tmpTitle){
+                    tmpTitle=Clist[j][i].title;
+                }
+                if(Clist[j][i].title != "" && Clist[j][i].title == tmpTitle){
+                    if(tmpStarthMin>Clist[j][i].startHour){
+                        tmpStarthMin=Clist[j][i].startHour;
+                        tmpStartm=Clist[j][i].startMin;
+                    }
+                    if(tmpEndhMax<Clist[j][i].endHour){
+                        tmpEndhMax=Clist[j][i].endHour;
+                        tmpEndm=Clist[j][i].endMin;
                     }
                 }
             }
+            tmpStarthMin=-1;
+            tmpStartm=-1;
+            tmpEndhMax=-1;
+            tmpEndm=-1;
+        }
+
+        for(int i=0;i<classList.size();i++){
+            System.out.println(classList.get(i).title);
         }
     }
 }
