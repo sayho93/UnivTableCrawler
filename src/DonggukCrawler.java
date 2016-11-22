@@ -12,9 +12,10 @@ public class DonggukCrawler extends Crawler {
     /**
      * DONGGUK UNIVERSITY
      */
-    //ID = "2014112102 ";
-    //PW = "fishcreek1!";
-    public Document document;
+    //ID = "2014112102 "
+    //PW = "fishcreek1!"
+    //ID = "2014112021
+    //PW= gpswpf12!!
     private String trashValue="시간/월화수목금토";
     public DonggukCrawler(final String userId, final String userPw, SFCallback onStart, SFCallback onConnect, SFCallback onFinish) {
         classList.clear();
@@ -198,6 +199,10 @@ public class DonggukCrawler extends Crawler {
                     tmpStartm=-1;
                     tmpEndhMax=-1;
                     tmpEndm=-1;
+                }
+
+                if(j==31 && tmpTitle.equals(Clist[j][i])){
+                    classList.add(new ClassInfo(Clist[j][i].title, Clist[j][i].location, Clist[j][i].rawtime,Clist[j][i].weekDay, tmpStarthMin, tmpStartm, tmpEndhMax, tmpEndm));
                 }
             }
             tmpStarthMin=30;
