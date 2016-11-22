@@ -1,9 +1,10 @@
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
+        import org.jsoup.Jsoup;
+        import org.jsoup.nodes.Element;
+        import org.jsoup.select.Elements;
 
-import java.io.IOException;
-import java.util.ArrayList;
+        import java.io.IOException;
+        import java.util.ArrayList;
 
 /**
  * Created by 전세호 on 2016-11-14.
@@ -50,8 +51,88 @@ public class SogangCrawler extends Crawler {
         userName=name.text();
         System.out.println("name: "+userName);
 
+        document=Jsoup.connect(URL_TIME)
+                .followRedirects(true)
+                .cookies(response.cookies())
+                .followRedirects(true)
+                .method(Connection.Method.POST)
+                .timeout(TIMEOUT)
+                .post();
+        Elements table=document.select("table.questionlist");
+        // System.out.println(table.text());
 
-        
+        String Clist[][]=new String[56][8];
+        int lineIndicator=-1;
+
+        for(Element trTags: table.select("tr")){        //시간표 Clist에 긁어오는 반복문
+            //System.out.println(trTags.text());
+            if(lineIndicator%4 == 0) {
+                for (int i = 1; i < 8; i++) {
+                    if (!trashValue.contains(trTags.child(i).text())) {
+                        System.out.println("[" + trTags.child(i).text() + "]");
+                        Clist[lineIndicator][i-1] = trTags.child(i).text();
+                    }
+                }
+            }
+            else{
+                for(int i=0;i<7;i++){
+                    if (!trashValue.contains(trTags.child(i).text())) {
+                        System.out.println("[" + trTags.child(i).text() + "]");
+                        Clist[lineIndicator][i] = trTags.child(i).text();
+                    }
+                }
+            }
+
+            lineIndicator++;
+        }
+
+        //Clist 로그
+        for(int i=0;i<56;i++){
+            for(int j=0;j<7;j++){
+                System.out.printf("[%20s]", Clist[i][j]);
+            }
+            System.out.println();
+        }
+
+        for(int i=0;i<7;i++){
+            for(int j=0;j<56;j++){
+                if(!Clist[j][i].equals(" ")){
+                    System.out.println("title:"+Clist[j][i]);
+                    ClassInfo tmpclass=new ClassInfo();
+                    int TLindicator;
+                    String tmpStime;
+                    int timeIndicator;
+                    int sIndicator;
+                    String tmpEtime;
+                    int eIndicator;
+                    String tmpRawtime;
+                    String tmpRawTL;
+
+                    tmpclass.title=Clist[j][i];
+                    tmpRawTL=Clist[j+2][i];
+                    System.out.println("tmpRawTL: "+tmpRawTL);
+                    TLindicator=tmpRawTL.indexOf("(");
+                    tmpRawtime=tmpRawTL.substring(0, TLindicator-1);
+                    tmpclass.location=tmpRawTL.substring(TLindicator, tmpRawtime.length());
+                    tmpclass.weekDay=i;
+                    timeIndicator=tmpRawtime.indexOf("~");
+                    tmpStime=tmpRawtime.substring(0, timeIndicator-1);
+                    tmpEtime=tmpRawtime.substring(timeIndicator+1, tmpRawtime.length());
+                    sIndicator=tmpStime.indexOf(":");
+                    eIndicator=tmpEtime.indexOf(":");
+                    tmpclass.startHour=Integer.parseInt(tmpStime.substring(0, sIndicator-1));
+                    tmpclass.startMin=Integer.parseInt(tmpStime.substring(sIndicator+1, tmpStime.length()));
+                    tmpclass.endHour=Integer.parseInt(tmpEtime.substring(0, eIndicator-1));
+                    tmpclass.endMin=Integer.parseInt(tmpEtime.substring(eIndicator+1, tmpEtime.length()));
+                    classList.add(tmpclass);
+                    j+=2;
+                }
+            }
+        }
+
+        for(int i=0;i<classList.size();i++){
+            System.out.println(" ["+classList.get(i).title+"] ["+classList.get(i).location+"] ["+classList.get(i).weekDay+"] ["+classList.get(i).startHour+":"+classList.get(i).startMin+"] ["+classList.get(i).endHour+":"+classList.get(i).endMin+"]");
+        }
         System.out.println("end of sogangCrawler");
     }
 }

@@ -26,7 +26,7 @@ public abstract class Crawler {
     protected String PW;
 
     public boolean isVerified=false;
-
+    protected String trashValue="전체 시간표시간/월화수목금토일";
 
     protected static final int TIMEOUT = 15000;
 

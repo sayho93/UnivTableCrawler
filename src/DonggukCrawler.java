@@ -16,7 +16,7 @@ public class DonggukCrawler extends Crawler {
     //PW = "fishcreek1!"
     //ID = "2014112021
     //PW= gpswpf12!!
-    private String trashValue="시간/월화수목금토";
+
     public DonggukCrawler(final String userId, final String userPw, SFCallback onStart, SFCallback onConnect, SFCallback onFinish) {
         classList.clear();
         URL_AUTH = "https://eclass.dongguk.edu/User.do?cmd=loginUser"; // Login Link
