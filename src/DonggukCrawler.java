@@ -1,14 +1,10 @@
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 /**
  * Created by 전세호 on 2016-11-14.
  */
@@ -174,35 +170,44 @@ public class DonggukCrawler extends Crawler {
         }
         */
         String tmpTitle="";
-        int tmpStarthMin=-1;
+        int tmpStarthMin=30;
         int tmpStartm=-1;
         int tmpEndhMax=-1;
         int tmpEndm=-1;
 
         for(int i=0;i<6;i++){
             for(int j=0;j<32;j++){
-                if(Clist[j][i].title != "" && Clist[j][i].title != tmpTitle){
+                if(Clist[j][i].title != "" && !tmpTitle.equals(Clist[j][i].title)){
                     tmpTitle=Clist[j][i].title;
                 }
-                if(Clist[j][i].title != "" && Clist[j][i].title == tmpTitle){
+
+                if(Clist[j][i].title != "" && tmpTitle.equals(Clist[j][i].title)){
                     if(tmpStarthMin>Clist[j][i].startHour){
                         tmpStarthMin=Clist[j][i].startHour;
                         tmpStartm=Clist[j][i].startMin;
                     }
-                    if(tmpEndhMax<Clist[j][i].endHour){
+                    if(tmpEndhMax<=Clist[j][i].endHour){
                         tmpEndhMax=Clist[j][i].endHour;
                         tmpEndm=Clist[j][i].endMin;
                     }
                 }
+
+                if(Clist[j][i].title != "" && !tmpTitle.equals(Clist[j+1][i].title)){
+                    classList.add(new ClassInfo(Clist[j][i].title, Clist[j][i].location, Clist[j][i].rawtime,Clist[j][i].weekDay, tmpStarthMin, tmpStartm, tmpEndhMax, tmpEndm));
+                    tmpStarthMin=30;
+                    tmpStartm=-1;
+                    tmpEndhMax=-1;
+                    tmpEndm=-1;
+                }
             }
-            tmpStarthMin=-1;
+            tmpStarthMin=30;
             tmpStartm=-1;
             tmpEndhMax=-1;
             tmpEndm=-1;
         }
-
+        //classList 로그
         for(int i=0;i<classList.size();i++){
-            System.out.println(classList.get(i).title);
+            System.out.println(" ["+classList.get(i).title+"] ["+classList.get(i).location+"] ["+classList.get(i).weekDay+"] ["+classList.get(i).startHour+":"+classList.get(i).startMin+"] ["+classList.get(i).endHour+":"+classList.get(i).endMin+"]");
         }
     }
 }
