@@ -69,7 +69,7 @@ public class SogangCrawler extends Crawler {
             if(lineIndicator%4 == 0) {
                 for (int i = 1; i < 8; i++) {
                     if (!trashValue.contains(trTags.child(i).text())) {
-                        System.out.println("[" + trTags.child(i).text() + "]");
+                       // System.out.println("[" + trTags.child(i).text() + "]");
                         Clist[lineIndicator][i-1] = trTags.child(i).text();
                     }
                 }
@@ -77,7 +77,7 @@ public class SogangCrawler extends Crawler {
             else{
                 for(int i=0;i<7;i++){
                     if (!trashValue.contains(trTags.child(i).text())) {
-                        System.out.println("[" + trTags.child(i).text() + "]");
+                       // System.out.println("[" + trTags.child(i).text() + "]");
                         Clist[lineIndicator][i] = trTags.child(i).text();
                     }
                 }
@@ -89,14 +89,14 @@ public class SogangCrawler extends Crawler {
         //Clist 로그
         for(int i=0;i<56;i++){
             for(int j=0;j<7;j++){
-                System.out.printf("[%20s]", Clist[i][j]);
+                System.out.printf("[%s]", Clist[i][j]);
             }
             System.out.println();
         }
 
         for(int i=0;i<7;i++){
             for(int j=0;j<56;j++){
-                if(!Clist[j][i].equals(" ")){
+                if(!Clist[j][i].equals(" ")){
                     System.out.println("title:"+Clist[j][i]);
                     ClassInfo tmpclass=new ClassInfo();
                     int TLindicator;
@@ -112,17 +112,21 @@ public class SogangCrawler extends Crawler {
                     tmpRawTL=Clist[j+2][i];
                     System.out.println("tmpRawTL: "+tmpRawTL);
                     TLindicator=tmpRawTL.indexOf("(");
-                    tmpRawtime=tmpRawTL.substring(0, TLindicator-1);
-                    tmpclass.location=tmpRawTL.substring(TLindicator, tmpRawtime.length());
-                    tmpclass.weekDay=i;
+                    System.out.println("TLindicator: "+TLindicator);
+                    tmpRawtime=tmpRawTL.substring(0, TLindicator);
+                    System.out.println("tmpRawtime: "+tmpRawtime);
+                    tmpclass.location=tmpRawTL.substring(TLindicator, tmpRawTL.length());
+                    System.out.println("tmplocation: "+tmpclass.location);
+                    tmpclass.weekDay=i+1;
                     timeIndicator=tmpRawtime.indexOf("~");
-                    tmpStime=tmpRawtime.substring(0, timeIndicator-1);
+                    System.out.println("timeIndicator: "+timeIndicator);
+                    tmpStime=tmpRawtime.substring(0, timeIndicator);
                     tmpEtime=tmpRawtime.substring(timeIndicator+1, tmpRawtime.length());
                     sIndicator=tmpStime.indexOf(":");
                     eIndicator=tmpEtime.indexOf(":");
-                    tmpclass.startHour=Integer.parseInt(tmpStime.substring(0, sIndicator-1));
+                    tmpclass.startHour=Integer.parseInt(tmpStime.substring(0, sIndicator));
                     tmpclass.startMin=Integer.parseInt(tmpStime.substring(sIndicator+1, tmpStime.length()));
-                    tmpclass.endHour=Integer.parseInt(tmpEtime.substring(0, eIndicator-1));
+                    tmpclass.endHour=Integer.parseInt(tmpEtime.substring(0, eIndicator));
                     tmpclass.endMin=Integer.parseInt(tmpEtime.substring(eIndicator+1, tmpEtime.length()));
                     classList.add(tmpclass);
                     j+=2;
