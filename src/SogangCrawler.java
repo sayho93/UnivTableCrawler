@@ -74,7 +74,7 @@ public class SogangCrawler extends Crawler {
                     }
                 }
             }
-            else{
+            else if(lineIndicator != -1){
                 for(int i=0;i<7;i++){
                     if (!trashValue.contains(trTags.child(i).text())) {
                        // System.out.println("[" + trTags.child(i).text() + "]");
@@ -87,17 +87,19 @@ public class SogangCrawler extends Crawler {
         }
 
         //Clist 로그
+        /*
         for(int i=0;i<56;i++){
             for(int j=0;j<7;j++){
                 System.out.printf("[%s]", Clist[i][j]);
             }
             System.out.println();
         }
+        */
 
         for(int i=0;i<7;i++){
             for(int j=0;j<56;j++){
                 if(!Clist[j][i].equals(" ")){
-                    System.out.println("title:"+Clist[j][i]);
+                    //System.out.println("title:"+Clist[j][i]);
                     ClassInfo tmpclass=new ClassInfo();
                     int TLindicator;
                     String tmpStime;
@@ -110,16 +112,16 @@ public class SogangCrawler extends Crawler {
 
                     tmpclass.title=Clist[j][i];
                     tmpRawTL=Clist[j+2][i];
-                    System.out.println("tmpRawTL: "+tmpRawTL);
+                    //System.out.println("tmpRawTL: "+tmpRawTL);
                     TLindicator=tmpRawTL.indexOf("(");
-                    System.out.println("TLindicator: "+TLindicator);
+                    //System.out.println("TLindicator: "+TLindicator);
                     tmpRawtime=tmpRawTL.substring(0, TLindicator);
-                    System.out.println("tmpRawtime: "+tmpRawtime);
+                    //System.out.println("tmpRawtime: "+tmpRawtime);
                     tmpclass.location=tmpRawTL.substring(TLindicator, tmpRawTL.length());
-                    System.out.println("tmplocation: "+tmpclass.location);
+                    //System.out.println("tmplocation: "+tmpclass.location);
                     tmpclass.weekDay=i+1;
                     timeIndicator=tmpRawtime.indexOf("~");
-                    System.out.println("timeIndicator: "+timeIndicator);
+                    //System.out.println("timeIndicator: "+timeIndicator);
                     tmpStime=tmpRawtime.substring(0, timeIndicator);
                     tmpEtime=tmpRawtime.substring(timeIndicator+1, tmpRawtime.length());
                     sIndicator=tmpStime.indexOf(":");
