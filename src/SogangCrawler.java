@@ -18,9 +18,10 @@ public class SogangCrawler extends Crawler {
     public SogangCrawler(final String userId, final String userPw, SFCallback onStart, SFCallback onConnect, SFCallback onFinish) {
         classList.clear();
         URL_AUTH = "https://eclass.sogang.ac.kr/ilos/lo/login.acl";
+        URL_AUTH_MOBILE="http://eclass.sogang.ac.kr/ilos/m/main/login_form.acl";
         URL_TIME = "http://eclass.sogang.ac.kr/ilos/st/main/pop_academic_timetable_form.acl";
         URL_HOME = "http://eclass.sogang.ac.kr/ilos/main/main_form.acl";
-        URL_HAND = "http://eclass.sogang.ac.kr/ilos/mp/mypage_main_form.acl";
+        URL_HAND = "http://eclass.sogang.ac.kr/ilos/m/st/report_list_form.acl";
         FORM_ID = "usr_id";
         FORM_PW = "usr_pwd";
         ID = userId;
@@ -30,6 +31,7 @@ public class SogangCrawler extends Crawler {
         this.onFinish = onFinish;
         this.onFail = onFail;
     }
+
     public void doInBackground() throws IOException {
         System.out.println("start of sogangCrawler");
         Connection.Response response= Jsoup.connect(URL_AUTH)
@@ -135,7 +137,7 @@ public class SogangCrawler extends Crawler {
                 }
             }
         }
-
+        System.out.println("수업 목록");
         for(int i=0;i<classList.size();i++){
             System.out.println(" ["+classList.get(i).title+"] ["+classList.get(i).location+"] ["+classList.get(i).weekDay+"] ["+classList.get(i).startHour+":"+classList.get(i).startMin+"] ["+classList.get(i).endHour+":"+classList.get(i).endMin+"]");
         }

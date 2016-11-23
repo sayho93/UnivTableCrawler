@@ -1,5 +1,6 @@
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -56,13 +57,44 @@ public class KookminCrawler extends Crawler {
                 .timeout(TIMEOUT)
                 .post();
         */
+
+
         document=Jsoup.connect("http://yjham2002.woobi.co.kr/test.html")
                 .followRedirects(true)
                 .method(Connection.Method.POST)
                 .timeout(TIMEOUT)
                 .post();
-
         Elements table=document.select("table.table_bg");
-        System.out.println(table.text());
+        //System.out.println(table.text());
+
+        ClassInfo ClistA[][]=new ClassInfo[15][6];
+        ClassInfo ClistB[][]=new ClassInfo[11][6];
+
+        for(Element trTags: table.select("tr")){
+            for(int i=2;i<14;i++){
+                if(trTags.child(0).text().contains("학년도") || trTags.child(0).text().equals("")){
+                    continue;
+                }
+                String rawtime=trTags.child(0).text();
+                System.out.println("rawtime: "+rawtime);
+                if(i%2==0){
+                    ClassInfo tmpClass=new ClassInfo();
+                    if(!trashValue.contains(trTags.child(i).text()) && trTags.child(i).text().equals("")){
+
+                    }
+                }
+                else if(i%2==1){
+                    ClassInfo tmpClass=new ClassInfo();
+                    if(!trashValue.contains(trTags.child(i).text()) && trTags.child(i).text().equals("")){
+
+                    }
+                    Element e;
+                    Integer.parseInt(e.attr("rowspan"))
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.println("end of kookminCrawler");
     }
 }

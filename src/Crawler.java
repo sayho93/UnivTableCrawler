@@ -17,6 +17,7 @@ public abstract class Crawler {
     protected SFCallback onStart, onConnect, onFinish, onFail;
 
     protected String URL_AUTH;
+    protected String URL_AUTH_MOBILE;
     protected String URL_TIME;
     protected String URL_HOME;
     protected String URL_HAND;
