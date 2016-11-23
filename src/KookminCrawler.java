@@ -69,32 +69,37 @@ public class KookminCrawler extends Crawler {
 
         ClassInfo ClistA[][]=new ClassInfo[15][6];
         ClassInfo ClistB[][]=new ClassInfo[11][6];
-
+        int lineIndicator=0;
         for(Element trTags: table.select("tr")){
-            for(int i=2;i<14;i++){
-                if(trTags.child(0).text().contains("학년도") || trTags.child(0).text().equals("")){
-                    continue;
-                }
-                String rawtime=trTags.child(0).text();
-                System.out.println("rawtime: "+rawtime);
-                if(i%2==0){
-                    ClassInfo tmpClass=new ClassInfo();
-                    if(!trashValue.contains(trTags.child(i).text()) && trTags.child(i).text().equals("")){
-
-                    }
-                }
-                else if(i%2==1){
-                    ClassInfo tmpClass=new ClassInfo();
-                    if(!trashValue.contains(trTags.child(i).text()) && trTags.child(i).text().equals("")){
-
-                    }
-                    Element e;
-                    Integer.parseInt(e.attr("rowspan"))
-                }
+            if(trTags.child(0).text().contains("학년도")){    //같은 클래스명 가진 테이블 건너뛰기
+                continue;
             }
-            System.out.println();
-        }
+            /*
+            if(trTags.text().equals(" ")){
+                continue;
+            }
+            */
+            if(trTags.attr("class").equals("table_header_center")){     //요일 행 건너뛰기
+                continue;
+            }
 
+            if(lineIndicator==0){               //first line
+
+            }
+            else if(lineIndicator%6==1){        //type 1
+
+            }
+            else if(lineIndicator%2==1){        //left type
+
+            }
+            else if(lineIndicator%6==4){        //right type
+
+            }
+            else{                               //none type
+
+            }
+            lineIndicator++;
+        }
         System.out.println("end of kookminCrawler");
     }
 }
