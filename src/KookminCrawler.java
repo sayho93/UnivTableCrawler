@@ -34,6 +34,7 @@ public class KookminCrawler extends Crawler {
     }
     public void doInBackground() throws IOException {
         System.out.println("Start of kookminCrawler");
+        //국민대 홈페이지 연결부분
         /*
         Connection.Response response= Jsoup.connect(URL_AUTH)
                 .followRedirects(true)
@@ -68,9 +69,9 @@ public class KookminCrawler extends Crawler {
                 .post();
         Elements table=document.select("table.table_bg");
         //System.out.println(table.text());
-
-        ClassInfo ClistA[][]=new ClassInfo[15][6];
-        ClassInfo ClistB[][]=new ClassInfo[11][6];
+        //테이블 전체 내용 로그
+        ClassInfo ClistA[][]=new ClassInfo[15][6];      //ShortTime용 배열
+        ClassInfo ClistB[][]=new ClassInfo[11][6];      //LongTime용 배열
         int lineIndicator=0;
 
         for(Element trTags: table.select("tr")){
@@ -125,7 +126,16 @@ public class KookminCrawler extends Crawler {
                 System.out.println("endRTS: "+endRawtimeShort);
                 System.out.println("startRTL: "+startRawtimeLong);
                 System.out.println("endRTL: "+endRawtimeLong);
+                for(int i=3;i<=14;i++){     //모든 라인 순회
+                    if(trTags.child(i).text()!=""){
+                        if(i%2==1){     //rawtimeShort 사용
 
+                        }
+                        else if(i%2==0){      //rawtimdLong 사용
+
+                        }
+                    }
+                }
 
             }
 
