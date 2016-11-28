@@ -25,10 +25,12 @@ public class KookminCrawler extends Crawler {
         FORM_PW = "txt_passwd";
         ID = userId;
         PW = userPw;
+        /*
         this.onStart = onStart;
         this.onConnect = onConnect;
         this.onFinish = onFinish;
         this.onFail = onFail;
+        */
     }
     public void doInBackground() throws IOException {
         System.out.println("Start of kookminCrawler");
@@ -70,7 +72,21 @@ public class KookminCrawler extends Crawler {
         ClassInfo ClistA[][]=new ClassInfo[15][6];
         ClassInfo ClistB[][]=new ClassInfo[11][6];
         int lineIndicator=0;
+
         for(Element trTags: table.select("tr")){
+            String rawtimeShort="";
+            String rawtimeLong="";
+            String startRawtimeShort="";
+            String startRawtimeLong="";
+            String endRawtimeShort="";
+            String endRawtimeLong="";
+            int swungDashIndicatorShort=-1;
+            int swungDashIndicatorLong=-1;
+            int ScolonIndicatorShort=-1;
+            int ScolonIndicatorLong=-1;
+            int EcolonIndicatorShort=-1;
+            int EcolonIndicatorLoong=-1;
+
             if(trTags.child(0).text().contains("학년도")){    //같은 클래스명 가진 테이블 건너뛰기
                 continue;
             }
@@ -84,17 +100,43 @@ public class KookminCrawler extends Crawler {
             }
 
             if(lineIndicator==0){               //first line
-
+                lineIndicator++;
+                continue;
+                /*
+                String rawtime=trTags.child(1).text();
+                swungDashIndicator=rawtime.indexOf("~");
+                startRawtime=rawtime.substring(swungDashIndicator-5, swungDashIndicator);
+                endRawtime=rawtime.substring(swungDashIndicator+1, rawtime.length());
+                System.out.println("startRawtime: "+startRawtime);
+                System.out.println("endRawtime: "+endRawtime);
+                */
             }
+
             else if(lineIndicator%6==1){        //type 1
+                rawtimeShort=trTags.child(1).text();
+                rawtimeLong=trTags.child(2).text();
+                swungDashIndicatorShort=rawtimeShort.indexOf("~");
+                swungDashIndicatorLong=rawtimeLong.indexOf("~");
+                startRawtimeShort=rawtimeShort.substring(swungDashIndicatorShort-5, swungDashIndicatorShort);
+                startRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong-5, swungDashIndicatorLong);
+                endRawtimeShort=rawtimeShort.substring(swungDashIndicatorShort+1, rawtimeShort.length());
+                endRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong+1, rawtimeLong.length());
+                System.out.println("startRTS: "+startRawtimeShort);
+                System.out.println("endRTS: "+endRawtimeShort);
+                System.out.println("startRTL: "+startRawtimeLong);
+                System.out.println("endRTL: "+endRawtimeLong);
+
 
             }
+
             else if(lineIndicator%2==1){        //left type
 
             }
+
             else if(lineIndicator%6==4){        //right type
 
             }
+
             else{                               //none type
 
             }
