@@ -30,4 +30,13 @@ public class ClassInfo {
     public ClassInfo clone(){
         return new ClassInfo(title, location, rawtime, weekDay, startHour, startMin, endHour, endMin);
     }
+
+    public void categorizeKookminClass(String rawdata){     //국민대 수업정보 문자열 분류
+        int titleIndex;
+        int locationIndex;
+        titleIndex=rawdata.indexOf("(");
+        locationIndex=rawdata.indexOf(")");
+        this.title=rawdata.substring(0, titleIndex-1);
+        this.location=rawdata.substring(locationIndex+1, rawdata.length());
+    }
 }

@@ -67,14 +67,15 @@ public class KookminCrawler extends Crawler {
                 .method(Connection.Method.POST)
                 .timeout(TIMEOUT)
                 .post();
+
         Elements table=document.select("table.table_bg");
         //System.out.println(table.text());
         //테이블 전체 내용 로그
-        ClassInfo ClistA[][]=new ClassInfo[15][6];      //ShortTime용 배열
-        ClassInfo ClistB[][]=new ClassInfo[11][6];      //LongTime용 배열
+        ClassInfo ClistA[][]=new ClassInfo[14][6];      //ShortTime용 배열
+        ClassInfo ClistB[][]=new ClassInfo[10][6];      //LongTime용 배열
         int lineIndicator=0;
 
-        for(Element trTags: table.select("tr")){
+        for(Element trTags: table.select("tr")){        //tr 단위로 읽는다
             String rawtimeShort="";
             String rawtimeLong="";
             String startRawtimeShort="";
@@ -100,7 +101,7 @@ public class KookminCrawler extends Crawler {
                 continue;
             }
 
-            if(lineIndicator==0){               //first line
+            if(lineIndicator==0){               //first line: 안읽도록 처리하기로 함
                 lineIndicator++;
                 continue;
                 /*
@@ -113,7 +114,7 @@ public class KookminCrawler extends Crawler {
                 */
             }
 
-            else if(lineIndicator%6==1){        //type 1
+            else if(lineIndicator%6==1){        //type 1: tr에 short, long 둘 다 있는 타입
                 rawtimeShort=trTags.child(1).text();
                 rawtimeLong=trTags.child(2).text();
                 swungDashIndicatorShort=rawtimeShort.indexOf("~");
@@ -127,14 +128,20 @@ public class KookminCrawler extends Crawler {
                 System.out.println("startRTL: "+startRawtimeLong);
                 System.out.println("endRTL: "+endRawtimeLong);
                 for(int i=3;i<=14;i++){     //모든 라인 순회
-                    if(trTags.child(i).text()!=""){
+                    if(!trTags.child(i).text().equals(" ")){
+                        ClassInfo tmpClass=new ClassInfo();     //하나씩 쑤셔박을 객체
                         if(i%2==1){     //rawtimeShort 사용
-
+                            System.out.println("["+trTags.child(i).text()+"]");
+                            tmpClass.weekDay=i/2;
+                            tmpClass.categorizeKookminClass(trTags.child(i).text());
+                            ClistA[lineIndicator-1][i/2]=tmpClass;
+                            System.out.println("ClistA["+(lineIndicator-1)+"]["+(i/2)+"] : ["+ClistA[lineIndicator-1][i/2].title+"]");
                         }
                         else if(i%2==0){      //rawtimdLong 사용
 
                         }
                     }
+                    //System.out.println("skip");
                 }
 
             }
