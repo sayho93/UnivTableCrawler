@@ -137,11 +137,15 @@ public class KookminCrawler extends Crawler {
                             ClistA[lineIndicator-1][i/2]=tmpClass;
                             System.out.println("ClistA["+(lineIndicator-1)+"]["+(i/2)+"] : " +
                                     "["+ClistA[lineIndicator-1][i/2].title+ClistA[lineIndicator-1][i/2].location+ClistA[lineIndicator-1][i/2].weekDay+"]");
+                            //배열 삽입시 로그
                         }
                         else if(i%2==0){      //rawtimdLong 사용
                             tmpClass.weekDay=i/2 - 1;
                             tmpClass.categorizeKookminClass(trTags.child(i).text());
                             ClistB[lineIndicator-1][i/2-1]=tmpClass;
+                            System.out.println("ClistB["+(lineIndicator-1)+"]["+(i/2)+"] : " +
+                                    "["+ClistB[lineIndicator-1][i/2].title+ClistB[lineIndicator-1][i/2].location+ClistB[lineIndicator-1][i/2].weekDay+"]");
+                            //배열 삽입시 로그
                         }
                     }
                     //System.out.println("skip");
