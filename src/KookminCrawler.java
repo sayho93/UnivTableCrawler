@@ -134,16 +134,16 @@ public class KookminCrawler extends Crawler {
                             String tmpline=rawtimeShort.substring(1, 3);
                             if(tmpline.contains(" ")) actualLine=Integer.parseInt(tmpline.substring(0,1));
                             else actualLine=Integer.parseInt(tmpline);
-                            System.out.println("actual Line:"+actualLine);
-                            //System.out.println("["+trTags.child(i).text()+"]");
+                            //System.out.println("actual Line:"+actualLine);        //실제 저장될 배열 줄 위치
                             tmpClass.weekDay=i/2;
                             tmpClass.categorizeKookminClass(trTags.child(i).text());
                             ClistA[actualLine][i/2]=tmpClass;
                             tmpClass.insertTime(startRawtimeShort, endRawtimeShort);
-
+                            /*
                             System.out.println("ClistA["+(actualLine)+"]["+(i/2)+"] : " +
                                     "[title:"+ClistA[actualLine][i/2].title+"|location:"+ClistA[actualLine][i/2].location+"|weekday:"+ClistA[actualLine][i/2].weekDay+"]");
                             System.out.println("sHour:"+ClistA[actualLine][i/2].startHour+" sMin:"+ClistA[actualLine][i/2].startMin+" eHour:"+ClistA[actualLine][i/2].endHour+" endMin:"+ClistA[actualLine][i/2].endMin);
+                            */
                             //배열 삽입시 로그
                         }
                         else if(i%2==0){      //rawtimdLong 사용
@@ -186,8 +186,29 @@ public class KookminCrawler extends Crawler {
                 }
             }
 
+            else if(lineIndicator==28){     //맨 마지막시간 처리
+                System.out.println("line28");
+            }
+
             else if(lineIndicator%6==4){        //right type
-                
+
+                rawtimeLong=trTags.child(1).text();
+                swungDashIndicatorLong=rawtimeLong.indexOf("~");
+                startRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong-5, swungDashIndicatorLong);
+                endRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong+1, rawtimeLong.length());
+                System.out.println(startRawtimeLong+endRawtimeLong);
+                String tmpline=rawtimeLong.substring(1,2);
+                String orderTable = "ABCDEFGHI";
+                actualLine=orderTable.indexOf(tmpline)+1;
+                for(int i=2;i<=7;i++){
+                    if(!trTags.child(i).text().equals("") && !trTags.child(i).text().equals(" ")){
+                        ClassInfo tmpClass=new ClassInfo();
+                        tmpClass.weekDay=i-1;
+                        tmpClass.categorizeKookminClass(trTags.child(i).text());
+                        ClistB[actualLine][i-1]=tmpClass;
+                        tmpClass.insertTime(startRawtimeLong, endRawtimeLong);
+                    }
+                }
             }
 
             else{                               //none type
