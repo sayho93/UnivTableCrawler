@@ -16,15 +16,15 @@ public class KookminCrawler extends Crawler {
     //ID = "20145160";
     //PW = "qkrtkddl2#";
     public KookminCrawler(final String userId, final String userPw, SFCallback onStart, SFCallback onConnect, SFCallback onFinish) {
-        classList.clear();
-        URL_AUTH = "http://ktis.kookmin.ac.kr/kmu/com.Login.do?";
-        URL_TIME = "http://ktis.kookmin.ac.kr/kmu/ucb.Ucb0164rAGet01.do";
-        URL_HOME = "http://ktis.kookmin.ac.kr/kmu/usa.Usa0209eFGet01.do";
-        URL_HAND = "#";
-        FORM_ID = "txt_user_id";
-        FORM_PW = "txt_passwd";
-        ID = userId;
-        PW = userPw;
+            classList.clear();
+            URL_AUTH = "http://ktis.kookmin.ac.kr/kmu/com.Login.do?";
+            URL_TIME = "http://ktis.kookmin.ac.kr/kmu/ucb.Ucb0164rAGet01.do";
+            URL_HOME = "http://ktis.kookmin.ac.kr/kmu/usa.Usa0209eFGet01.do";
+            URL_HAND = "#";
+            FORM_ID = "txt_user_id";
+            FORM_PW = "txt_passwd";
+            ID = userId;
+            PW = userPw;
         /*
         this.onStart = onStart;
         this.onConnect = onConnect;
@@ -110,7 +110,7 @@ public class KookminCrawler extends Crawler {
                 System.out.println("endRawtime: "+endRawtime);
                 */
             }
-            else if(lineIndicator%6==1){        //type 1: tr에 short, long 둘 다 있는 타입
+            else if(lineIndicator%6==1 || lineIndicator==25){        //type 1: tr에 short, long 둘 다 있는 타입
                 rawtimeShort=trTags.child(1).text();
                 rawtimeLong=trTags.child(2).text();
                 swungDashIndicatorShort=rawtimeShort.indexOf("~");
@@ -174,7 +174,6 @@ public class KookminCrawler extends Crawler {
                 String tmpline=rawtimeShort.substring(1, 3);
                 if(tmpline.contains(" ")) actualLine=Integer.parseInt(tmpline.substring(0,1));
                 else actualLine=Integer.parseInt(tmpline);
-
                 for(int i=2;i<=7;i++){
                     if(!trTags.child(i).text().equals("") && !trTags.child(i).text().equals(" ")){
                         ClassInfo tmpClass=new ClassInfo();
@@ -186,12 +185,11 @@ public class KookminCrawler extends Crawler {
                 }
             }
 
-            else if(lineIndicator==28){     //맨 마지막시간 처리
-                System.out.println("line28");
+            else if(lineIndicator==28){     //맨 마지막시간 처리(필요 없음)
+                System.out.println("do nothing");
             }
 
-            else if(lineIndicator%6==4){        //right type
-
+            else if(lineIndicator%6==4 || lineIndicator==27){        //right type
                 rawtimeLong=trTags.child(1).text();
                 swungDashIndicatorLong=rawtimeLong.indexOf("~");
                 startRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong-5, swungDashIndicatorLong);
