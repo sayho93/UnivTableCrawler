@@ -61,7 +61,6 @@ public class KookminCrawler extends Crawler {
                 .post();
         */
 
-
         document=Jsoup.connect("http://yjham2002.woobi.co.kr/test.html")
                 .followRedirects(true)
                 .method(Connection.Method.POST)
@@ -214,6 +213,8 @@ public class KookminCrawler extends Crawler {
             }
             lineIndicator++;
         }
+
+        categorizeTimeTable(ClistA, ClistB);
         /*
         for(int i=0;i< ClistA.length;i++)
             for(int j=0;j<ClistA[i].length;j++)
@@ -224,5 +225,9 @@ public class KookminCrawler extends Crawler {
             for(int j=0;j< ClistA.length;j++)
                 if(ClistA[j][i]!=null) System.out.println("["+j+","+i+":"+ClistA[j][i].title+"]");
         System.out.println("end of kookminCrawler");
+    }
+
+    private void categorizeTimeTable(ClassInfo listA[][], ClassInfo listB[][]){
+
     }
 }
