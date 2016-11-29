@@ -101,7 +101,6 @@ public class KookminCrawler extends Crawler {
             if(trTags.attr("class").equals("table_header_center")){     //요일 행 건너뛰기
                 continue;
             }
-
             if(lineIndicator==0){               //first line: 안읽도록 처리하기로 함
                 lineIndicator++;
                 continue;
@@ -114,7 +113,6 @@ public class KookminCrawler extends Crawler {
                 System.out.println("endRawtime: "+endRawtime);
                 */
             }
-
             else if(lineIndicator%6==1){        //type 1: tr에 short, long 둘 다 있는 타입
                 rawtimeShort=trTags.child(1).text();
                 rawtimeLong=trTags.child(2).text();
@@ -145,22 +143,24 @@ public class KookminCrawler extends Crawler {
                             tmpClass.categorizeKookminClass(trTags.child(i).text());
                             ClistA[actualLine][i/2]=tmpClass;
                             tmpClass.insertTime(startRawtimeShort, endRawtimeShort);
+
                             System.out.println("ClistA["+(actualLine)+"]["+(i/2)+"] : " +
                                     "[title:"+ClistA[actualLine][i/2].title+"|location:"+ClistA[actualLine][i/2].location+"|weekday:"+ClistA[actualLine][i/2].weekDay+"]");
-                            System.out.println("sHour:"+ClistA[actualLine][i/2].startHour+"sMin:"+ClistA[actualLine][i/2].startMin+"eHour:"+ClistA[actualLine][i/2].endHour+"endMin:"+ClistA[actualLine][i/2].endMin);
+                            System.out.println("sHour:"+ClistA[actualLine][i/2].startHour+" sMin:"+ClistA[actualLine][i/2].startMin+" eHour:"+ClistA[actualLine][i/2].endHour+" endMin:"+ClistA[actualLine][i/2].endMin);
                             //배열 삽입시 로그
                         }
                         else if(i%2==0){      //rawtimdLong 사용
                             String tmpline=rawtimeLong.substring(1,2);
-                            String orderTable = "ABCDEFGHIJKLMN";
-                            orderTable.indexOf(tmpline);
-                            
+                            String orderTable = "ABCDEFGHI";
+                            actualLine=orderTable.indexOf(tmpline)+1;
+
                             tmpClass.weekDay=i/2 - 1;
                             tmpClass.categorizeKookminClass(trTags.child(i).text());
-                            ClistB[lineIndicator-1][i/2-1]=tmpClass;
+                            ClistB[actualLine][i/2-1]=tmpClass;
                             tmpClass.insertTime(startRawtimeLong, endRawtimeLong);
-                            System.out.println("ClistB["+(lineIndicator-1)+"]["+(i/2)+"] : " +
-                                    "["+ClistB[lineIndicator-1][i/2].title+ClistB[lineIndicator-1][i/2].location+ClistB[lineIndicator-1][i/2].weekDay+"]");
+
+                            System.out.println("ClistB["+(actualLine)+"]["+(i/2)+"] : " +
+                                    "["+ClistB[actualLine][i/2].title+ClistB[actualLine][i/2].location+ClistB[actualLine][i/2].weekDay+"]");
                             //배열 삽입시 로그
                         }
                     }
@@ -182,6 +182,10 @@ public class KookminCrawler extends Crawler {
             }
             lineIndicator++;
         }
+
+        for(int i=0;i< ClistA.length;i++)
+            for(int j=0;j<ClistA[i].length;j++)
+                if(ClistA[i][j]!=null) System.out.println("["+i+","+j+":"+ClistA[i][j].title+"]");
         System.out.println("end of kookminCrawler");
     }
 }
