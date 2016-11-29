@@ -126,7 +126,7 @@ public class KookminCrawler extends Crawler {
                 System.out.println("endRTL: "+endRawtimeLong);
                 */
                 for(int i=3;i<=14;i++){     //필요한 모든 td 순회
-                    if(!trTags.child(i).text().equals(" ")){
+                    if(!trTags.child(i).text().equals(" ") && !trTags.child(i).text().equals("")){
                         ClassInfo tmpClass=new ClassInfo();     //하나씩 쑤셔박을 객체
                         if(i%2==1){     //rawtimeShort 사용
                             //actualLine=Integer.parseInt(rawtimeShort.substring(1, 3));
@@ -225,8 +225,29 @@ public class KookminCrawler extends Crawler {
             for(int j=0;j<ClistA[i].length;j++)
                 if(ClistA[i][j]!=null) System.out.println("["+i+","+j+":"+ClistA[i][j].title+"]");
         */
+        System.out.println("final classList");
+        for(int i=0;i<classList.size();i++){
+            System.out.println(" ["+classList.get(i).title+"] ["+classList.get(i).location+"] ["+classList.get(i).weekDay+"] ["+classList.get(i).startHour+":"+classList.get(i).startMin+"] ["+classList.get(i).endHour+":"+classList.get(i).endMin+"]");
+        }
+        System.out.println("classListSize: "+classList.size());
 
-
+        for(int i=0;i<ClistA.length;i++){
+            for(int j=0;j<ClistA[0].length;j++){
+                if(ClistA[i][j]!=null){
+                    if(ClistA[i][j].title.length()>0) System.out.print("[*]");
+                }
+                else  System.out.print("[ ]");
+            }
+            System.out.println();
+        }
+        System.out.println("------------------");
+        for(int i=0;i<ClistB.length;i++){
+            for(int j=0;j<ClistB[0].length;j++){
+                if(ClistB[i][j]==null) System.out.print("[ ]");
+                else System.out.println("[*]");
+            }
+            System.out.println();
+        }
         System.out.println("end of kookminCrawler");
     }
 
