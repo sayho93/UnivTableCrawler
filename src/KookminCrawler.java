@@ -70,8 +70,8 @@ public class KookminCrawler extends Crawler {
         Elements table=document.select("table.table_bg");
         //System.out.println(table.text());
         //테이블 전체 내용 로그
-        ClassInfo ClistA[][]=new ClassInfo[15][6];      //ShortTime용 배열
-        ClassInfo ClistB[][]=new ClassInfo[11][6];      //LongTime용 배열
+        ClassInfo ClistA[][]=new ClassInfo[15][7];      //ShortTime용 배열
+        ClassInfo ClistB[][]=new ClassInfo[11][7];      //LongTime용 배열
         int lineIndicator=0;
 
         for(Element trTags: table.select("tr")){        //tr 단위로 읽는다
@@ -193,7 +193,7 @@ public class KookminCrawler extends Crawler {
                 swungDashIndicatorLong=rawtimeLong.indexOf("~");
                 startRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong-5, swungDashIndicatorLong);
                 endRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong+1, rawtimeLong.length());
-                System.out.println(startRawtimeLong+endRawtimeLong);
+                //System.out.println(startRawtimeLong+endRawtimeLong);
                 String tmpline=rawtimeLong.substring(1,2);
                 String orderTable = "ABCDEFGHI";
                 actualLine=orderTable.indexOf(tmpline)+1;
@@ -214,7 +214,7 @@ public class KookminCrawler extends Crawler {
             lineIndicator++;
         }
 
-        categorizeTimeTable(ClistA);
+        categorizeTimeTable(ClistA);        //ClistA 수업들 시간 합친 객체 삽입해주는 메소드
         categorizeTimeTable(ClistB);
         /*
         for(int i=0;i< ClistA.length;i++)
@@ -229,10 +229,59 @@ public class KookminCrawler extends Crawler {
     }
 
     private void categorizeTimeTable(ClassInfo Clist[][]){
-        for(int i=0;i<Clist[0].length;i++){
+        String tmpTitle="";
+        int tmpStarthMin=80;
+        int tmpStartm=-1;
+        int tmpEndhMax=-1;
+        int tmpEndm=-1;
+        System.out.println("Clist[0].length: "+Clist[0].length);
+        System.out.println("Clist.length: "+Clist.length);
+
+        for(int i=1;i<Clist[0].length;i++){
             for(int j=0;j<Clist.length;j++){
-                
+                if(Clist[j][i]!=null){
+                    if(!tmpTitle.equals(Clist[j][i].title)){
+                        tmpTitle=Clist[j][i].title;
+                       // System.out.println("initial class:"+tmpTitle);
+                       // System.out.println("["+j+","+i+"]");
+                    }
+
+                    if(tmpTitle.equals(Clist[j][i].title)){
+                        if(tmpStarthMin>Clist[j][i].startHour){
+                            tmpStarthMin=Clist[j][i].startHour;
+                            tmpStartm=Clist[j][i].startMin;
+                        }
+
+                        if(tmpEndhMax<=Clist[j][i].endHour){
+                            tmpEndhMax=Clist[j][i].endHour;
+                            tmpEndm=Clist[j][i].endMin;
+                        }
+                       // System.out.println("["+j+","+i+"]"+"1");
+                    }
+
+                    if(Clist[j+1][i]!=null && !tmpTitle.equals(Clist[j+1][i].title)){
+                        classList.add(new ClassInfo(Clist[j][i].title, Clist[j][i].location, Clist[j][i].rawtime,Clist[j][i].weekDay, tmpStarthMin, tmpStartm, tmpEndhMax, tmpEndm));
+                        tmpStarthMin=30;
+                        tmpStartm=-1;
+                        tmpEndhMax=-1;
+                        tmpEndm=-1;
+                       // System.out.println("["+j+","+i+"]");
+                    }
+
+                    if(j==Clist.length-1 && tmpTitle.equals(Clist[j][i])){
+                        classList.add(new ClassInfo(Clist[j][i].title, Clist[j][i].location, Clist[j][i].rawtime,Clist[j][i].weekDay, tmpStarthMin, tmpStartm, tmpEndhMax, tmpEndm));
+                        //System.out.println("["+j+","+i+"]");
+                    }
+                    tmpStarthMin=30;
+                    tmpStartm=-1;
+                    tmpEndhMax=-1;
+                    tmpEndm=-1;
+                }
             }
+        }
+        //classList 로그
+        for(int i=0;i<classList.size();i++){
+            System.out.println(" ["+classList.get(i).title+"] ["+classList.get(i).location+"] ["+classList.get(i).weekDay+"] ["+classList.get(i).startHour+":"+classList.get(i).startMin+"] ["+classList.get(i).endHour+":"+classList.get(i).endMin+"]");
         }
     }
 }
