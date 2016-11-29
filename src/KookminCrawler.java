@@ -123,26 +123,32 @@ public class KookminCrawler extends Crawler {
                 startRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong-5, swungDashIndicatorLong);
                 endRawtimeShort=rawtimeShort.substring(swungDashIndicatorShort+1, rawtimeShort.length());
                 endRawtimeLong=rawtimeLong.substring(swungDashIndicatorLong+1, rawtimeLong.length());
+                //time slice 로그
+                /*
                 System.out.println("startRTS: "+startRawtimeShort);
                 System.out.println("endRTS: "+endRawtimeShort);
                 System.out.println("startRTL: "+startRawtimeLong);
                 System.out.println("endRTL: "+endRawtimeLong);
+                */
                 for(int i=3;i<=14;i++){     //모든 라인 순회
                     if(!trTags.child(i).text().equals(" ")){
                         ClassInfo tmpClass=new ClassInfo();     //하나씩 쑤셔박을 객체
                         if(i%2==1){     //rawtimeShort 사용
-                            System.out.println("["+trTags.child(i).text()+"]");
+                            //System.out.println("["+trTags.child(i).text()+"]");
                             tmpClass.weekDay=i/2;
                             tmpClass.categorizeKookminClass(trTags.child(i).text());
                             ClistA[lineIndicator-1][i/2]=tmpClass;
+                            tmpClass.insertTime(startRawtimeShort, endRawtimeShort);
                             System.out.println("ClistA["+(lineIndicator-1)+"]["+(i/2)+"] : " +
-                                    "["+ClistA[lineIndicator-1][i/2].title+ClistA[lineIndicator-1][i/2].location+ClistA[lineIndicator-1][i/2].weekDay+"]");
+                                    "[title:"+ClistA[lineIndicator-1][i/2].title+"|location:"+ClistA[lineIndicator-1][i/2].location+"|weekday:"+ClistA[lineIndicator-1][i/2].weekDay+"]");
+                            System.out.println("sHour:"+ClistA[lineIndicator-1][i/2].startHour+"sMin:"+ClistA[lineIndicator-1][i/2].startMin+"eHour:"+ClistA[lineIndicator-1][i/2].endHour+"endMin:"+ClistA[lineIndicator-1][i/2].endMin);
                             //배열 삽입시 로그
                         }
                         else if(i%2==0){      //rawtimdLong 사용
                             tmpClass.weekDay=i/2 - 1;
                             tmpClass.categorizeKookminClass(trTags.child(i).text());
                             ClistB[lineIndicator-1][i/2-1]=tmpClass;
+                            tmpClass.insertTime(startRawtimeLong, endRawtimeLong);
                             System.out.println("ClistB["+(lineIndicator-1)+"]["+(i/2)+"] : " +
                                     "["+ClistB[lineIndicator-1][i/2].title+ClistB[lineIndicator-1][i/2].location+ClistB[lineIndicator-1][i/2].weekDay+"]");
                             //배열 삽입시 로그

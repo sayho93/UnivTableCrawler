@@ -39,4 +39,15 @@ public class ClassInfo {
         this.title=rawdata.substring(0, titleIndex-1);
         this.location=rawdata.substring(locationIndex+1, rawdata.length());
     }
+
+    public void insertTime(String startRawtime, String endRawtime){ //rawtime 받아서 categorize
+        int sColonIndicator=-1;
+        int eColonIndicator=-1;
+        sColonIndicator=startRawtime.indexOf(":");
+        eColonIndicator=endRawtime.indexOf(":");
+        this.startHour=Integer.parseInt(startRawtime.substring(0, sColonIndicator));
+        this.startMin=Integer.parseInt(startRawtime.substring(sColonIndicator+1, startRawtime.length()));
+        this.endHour=Integer.parseInt(endRawtime.substring(1, eColonIndicator));
+        this.endMin=Integer.parseInt(endRawtime.substring(eColonIndicator+1, endRawtime.length()));
+    }
 }
