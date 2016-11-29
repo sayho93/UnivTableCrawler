@@ -132,26 +132,7 @@ public class DonggukCrawler extends Crawler {
                         tmpClass.title = tmpString.substring(0, middleIndex - 1);
                         tmpClass.location = tmpString.substring(middleIndex, tmpString.length());
                     }
-                    switch (i) {
-                        case 1:
-                            tmpClass.weekDay = 0;
-                            break;
-                        case 2:
-                            tmpClass.weekDay = 1;
-                            break;
-                        case 3:
-                            tmpClass.weekDay = 2;
-                            break;
-                        case 4:
-                            tmpClass.weekDay = 3;
-                            break;
-                        case 5:
-                            tmpClass.weekDay = 4;
-                            break;
-                        case 6:
-                            tmpClass.weekDay=5;
-                            break;
-                    }
+                    tmpClass.weekDay=i;
                     Clist[lineIndicator][i-1]=tmpClass;
                     //System.out.println("Line number: "+lineIndicator);
                     //System.out.println("title: " + tmpClass.title + "location: " + tmpClass.location + "weekday: " + tmpClass.weekDay);

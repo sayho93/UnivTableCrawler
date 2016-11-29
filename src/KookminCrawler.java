@@ -85,10 +85,6 @@ public class KookminCrawler extends Crawler {
             String endRawtimeLong="";
             int swungDashIndicatorShort=-1;
             int swungDashIndicatorLong=-1;
-            int ScolonIndicatorShort=-1;
-            int ScolonIndicatorLong=-1;
-            int EcolonIndicatorShort=-1;
-            int EcolonIndicatorLoong=-1;
 
             if(trTags.child(0).text().contains("학년도")){    //같은 클래스명 가진 테이블 건너뛰기
                 continue;
@@ -101,6 +97,7 @@ public class KookminCrawler extends Crawler {
             if(trTags.attr("class").equals("table_header_center")){     //요일 행 건너뛰기
                 continue;
             }
+
             if(lineIndicator==0){               //first line: 안읽도록 처리하기로 함
                 lineIndicator++;
                 continue;
@@ -170,11 +167,27 @@ public class KookminCrawler extends Crawler {
             }
 
             else if(lineIndicator%2==1){        //left type
+                rawtimeShort=trTags.child(1).text();
+                swungDashIndicatorShort=rawtimeShort.indexOf("~");
+                startRawtimeShort=rawtimeShort.substring(swungDashIndicatorShort-5, swungDashIndicatorShort);
+                endRawtimeShort=rawtimeShort.substring(swungDashIndicatorShort+1, rawtimeShort.length());
+                String tmpline=rawtimeShort.substring(1, 3);
+                if(tmpline.contains(" ")) actualLine=Integer.parseInt(tmpline.substring(0,1));
+                else actualLine=Integer.parseInt(tmpline);
 
+                for(int i=2;i<=7;i++){
+                    if(!trTags.child(i).text().equals("") && !trTags.child(i).text().equals(" ")){
+                        ClassInfo tmpClass=new ClassInfo();
+                        tmpClass.weekDay=i-1;
+                        tmpClass.categorizeKookminClass(trTags.child(i).text());
+                        ClistA[actualLine][i-1]=tmpClass;
+                        tmpClass.insertTime(startRawtimeShort, endRawtimeShort);
+                    }
+                }
             }
 
             else if(lineIndicator%6==4){        //right type
-
+                
             }
 
             else{                               //none type
@@ -182,10 +195,15 @@ public class KookminCrawler extends Crawler {
             }
             lineIndicator++;
         }
-
+        /*
         for(int i=0;i< ClistA.length;i++)
             for(int j=0;j<ClistA[i].length;j++)
                 if(ClistA[i][j]!=null) System.out.println("["+i+","+j+":"+ClistA[i][j].title+"]");
+        */
+
+        for(int i=0;i<ClistA[0].length;i++)
+            for(int j=0;j< ClistA.length;j++)
+                if(ClistA[j][i]!=null) System.out.println("["+j+","+i+":"+ClistA[j][i].title+"]");
         System.out.println("end of kookminCrawler");
     }
 }

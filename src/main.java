@@ -7,7 +7,7 @@ public class main {
 
 
     public static void main(String[] args) {
-        DonggukCrawler donggukCrawler = new DonggukCrawler("2014112021", "gpswpf12!!", new SFCallback() {
+        DonggukCrawler donggukCrawler = new DonggukCrawler("2014112102", "fishcreek1!", new SFCallback() {
             @Override
             public void callback() {
             }
