@@ -214,7 +214,8 @@ public class KookminCrawler extends Crawler {
             lineIndicator++;
         }
 
-        categorizeTimeTable(ClistA, ClistB);
+        categorizeTimeTable(ClistA);
+        categorizeTimeTable(ClistB);
         /*
         for(int i=0;i< ClistA.length;i++)
             for(int j=0;j<ClistA[i].length;j++)
@@ -227,7 +228,11 @@ public class KookminCrawler extends Crawler {
         System.out.println("end of kookminCrawler");
     }
 
-    private void categorizeTimeTable(ClassInfo listA[][], ClassInfo listB[][]){
-
+    private void categorizeTimeTable(ClassInfo Clist[][]){
+        for(int i=0;i<Clist[0].length;i++){
+            for(int j=0;j<Clist.length;j++){
+                
+            }
+        }
     }
 }
