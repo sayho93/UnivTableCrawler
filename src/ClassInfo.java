@@ -36,7 +36,7 @@ public class ClassInfo {
         int locationIndex;
         titleIndex=rawdata.indexOf("(");
         locationIndex=rawdata.indexOf(")");
-        this.title=rawdata.substring(0, titleIndex-1);
+        this.title=rawdata.substring(0, titleIndex-1).replaceAll(" ", "");
         this.location=rawdata.substring(locationIndex+1, rawdata.length());
     }
 
