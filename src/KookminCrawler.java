@@ -71,11 +71,12 @@ public class KookminCrawler extends Crawler {
         Elements table=document.select("table.table_bg");
         //System.out.println(table.text());
         //테이블 전체 내용 로그
-        ClassInfo ClistA[][]=new ClassInfo[14][6];      //ShortTime용 배열
-        ClassInfo ClistB[][]=new ClassInfo[10][6];      //LongTime용 배열
+        ClassInfo ClistA[][]=new ClassInfo[15][6];      //ShortTime용 배열
+        ClassInfo ClistB[][]=new ClassInfo[11][6];      //LongTime용 배열
         int lineIndicator=0;
 
         for(Element trTags: table.select("tr")){        //tr 단위로 읽는다
+            int actualLine=-1;
             String rawtimeShort="";
             String rawtimeLong="";
             String startRawtimeShort="";
@@ -130,21 +131,30 @@ public class KookminCrawler extends Crawler {
                 System.out.println("startRTL: "+startRawtimeLong);
                 System.out.println("endRTL: "+endRawtimeLong);
                 */
-                for(int i=3;i<=14;i++){     //모든 라인 순회
+                for(int i=3;i<=14;i++){     //필요한 모든 td 순회
                     if(!trTags.child(i).text().equals(" ")){
                         ClassInfo tmpClass=new ClassInfo();     //하나씩 쑤셔박을 객체
                         if(i%2==1){     //rawtimeShort 사용
+                            //actualLine=Integer.parseInt(rawtimeShort.substring(1, 3));
+                            String tmpline=rawtimeShort.substring(1, 3);
+                            if(tmpline.contains(" ")) actualLine=Integer.parseInt(tmpline.substring(0,1));
+                            else actualLine=Integer.parseInt(tmpline);
+                            System.out.println("actual Line:"+actualLine);
                             //System.out.println("["+trTags.child(i).text()+"]");
                             tmpClass.weekDay=i/2;
                             tmpClass.categorizeKookminClass(trTags.child(i).text());
-                            ClistA[lineIndicator-1][i/2]=tmpClass;
+                            ClistA[actualLine][i/2]=tmpClass;
                             tmpClass.insertTime(startRawtimeShort, endRawtimeShort);
-                            System.out.println("ClistA["+(lineIndicator-1)+"]["+(i/2)+"] : " +
-                                    "[title:"+ClistA[lineIndicator-1][i/2].title+"|location:"+ClistA[lineIndicator-1][i/2].location+"|weekday:"+ClistA[lineIndicator-1][i/2].weekDay+"]");
-                            System.out.println("sHour:"+ClistA[lineIndicator-1][i/2].startHour+"sMin:"+ClistA[lineIndicator-1][i/2].startMin+"eHour:"+ClistA[lineIndicator-1][i/2].endHour+"endMin:"+ClistA[lineIndicator-1][i/2].endMin);
+                            System.out.println("ClistA["+(actualLine)+"]["+(i/2)+"] : " +
+                                    "[title:"+ClistA[actualLine][i/2].title+"|location:"+ClistA[actualLine][i/2].location+"|weekday:"+ClistA[actualLine][i/2].weekDay+"]");
+                            System.out.println("sHour:"+ClistA[actualLine][i/2].startHour+"sMin:"+ClistA[actualLine][i/2].startMin+"eHour:"+ClistA[actualLine][i/2].endHour+"endMin:"+ClistA[actualLine][i/2].endMin);
                             //배열 삽입시 로그
                         }
                         else if(i%2==0){      //rawtimdLong 사용
+                            String tmpline=rawtimeLong.substring(1,2);
+                            String orderTable = "ABCDEFGHIJKLMN";
+                            orderTable.indexOf(tmpline);
+                            
                             tmpClass.weekDay=i/2 - 1;
                             tmpClass.categorizeKookminClass(trTags.child(i).text());
                             ClistB[lineIndicator-1][i/2-1]=tmpClass;
