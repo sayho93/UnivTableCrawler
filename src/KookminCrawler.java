@@ -67,7 +67,7 @@ public class KookminCrawler extends Crawler {
                 .timeout(TIMEOUT)
                 .post();
 
-        Elements table=document.select("table.table_bg");
+        Elements table=document.select("table[width=100%");
         //System.out.println(table.text());
         //테이블 전체 내용 로그
         ClassInfo ClistA[][]=new ClassInfo[15][7];      //ShortTime용 배열
@@ -174,7 +174,7 @@ public class KookminCrawler extends Crawler {
                 if(tmpline.contains(" ")) actualLine=Integer.parseInt(tmpline.substring(0,1));
                 else actualLine=Integer.parseInt(tmpline);
                 for(int i=2;i<=7;i++){
-                    if(!trTags.child(i).text().equals("") && !trTags.child(i).text().equals(" ")){
+                    if(trTags.child(i).text().length()>1 && !trTags.child(i).text().equals(" ")){
                         ClassInfo tmpClass=new ClassInfo();
                         tmpClass.weekDay=i-1;
                         tmpClass.categorizeKookminClass(trTags.child(i).text());
@@ -198,7 +198,7 @@ public class KookminCrawler extends Crawler {
                 String orderTable = "ABCDEFGHI";
                 actualLine=orderTable.indexOf(tmpline)+1;
                 for(int i=2;i<=7;i++){
-                    if(!trTags.child(i).text().equals("") && !trTags.child(i).text().equals(" ")){
+                    if(trTags.child(i).text().length()>1 && !trTags.child(i).text().equals(" ")){
                         ClassInfo tmpClass=new ClassInfo();
                         tmpClass.weekDay=i-1;
                         tmpClass.categorizeKookminClass(trTags.child(i).text());
@@ -253,15 +253,15 @@ public class KookminCrawler extends Crawler {
 
     private void categorizeTimeTable(ClassInfo Clist[][]){
         String tmpTitle="";
-        int tmpStarthMin=30;
-        int tmpStartm=-1;
-        int tmpEndhMax=-1;
-        int tmpEndm=-1;
+        int tmpStarthMin = 30;
+        int tmpStartm = -1;
+        int tmpEndhMax = -1;
+        int tmpEndm = -1;
         System.out.println("Clist[0].length: "+Clist[0].length);
         System.out.println("Clist.length: "+Clist.length);
 
-        for(int i=1;i<Clist[0].length;i++){
-            for(int j=0;j<Clist.length;j++){
+        for(int i = 1; i < Clist[0].length; i++){
+            for(int j = 0; j < Clist.length; j++){
                 if(Clist[j][i]!=null){
                     if(!tmpTitle.equals(Clist[j][i].title)){
                         tmpTitle=Clist[j][i].title;
@@ -270,7 +270,7 @@ public class KookminCrawler extends Crawler {
                     }
 
                     if(tmpTitle.equals(Clist[j][i].title)){
-                        System.out.println(tmpStarthMin+","+tmpStartm+","+tmpEndhMax+","+tmpEndm);
+                        System.out.println(tmpStarthMin + "," + tmpStartm + "," + tmpEndhMax + "," + tmpEndm);
                         System.out.println("Clis: "+Clist[j][i].startHour+","+Clist[j][i].startMin+","+Clist[j][i].endHour+","+Clist[j][i].endMin);
                         if(tmpStarthMin>Clist[j][i].startHour){
                             tmpStarthMin=Clist[j][i].startHour;
@@ -285,19 +285,19 @@ public class KookminCrawler extends Crawler {
                         System.out.println(tmpStarthMin+","+tmpStartm+","+tmpEndhMax+","+tmpEndm);
                     }
 
-                    if(Clist[j+1][i]==null || !tmpTitle.equals(Clist[j+1][i].title)){
+                    if(Clist[j+1][i] == null || !tmpTitle.equals(Clist[j+1][i].title)){
                         classList.add(new ClassInfo(Clist[j][i].title, Clist[j][i].location, Clist[j][i].rawtime,Clist[j][i].weekDay, tmpStarthMin, tmpStartm, tmpEndhMax, tmpEndm));
-                        tmpStarthMin=30;
+                        tmpStarthMin = 30;
                         tmpStartm=-1;
                         tmpEndhMax=-1;
                         tmpEndm=-1;
-                       // System.out.println("["+j+","+i+"]");
+                        // System.out.println("["+j+","+i+"]");
                     }
 
-                    if(j==Clist.length-1 && tmpTitle.equals(Clist[j][i])){
+                    if(j == Clist.length - 1 && tmpTitle.equals(Clist[j][i])){
                         classList.add(new ClassInfo(Clist[j][i].title, Clist[j][i].location, Clist[j][i].rawtime,Clist[j][i].weekDay, tmpStarthMin, tmpStartm, tmpEndhMax, tmpEndm));
                         //System.out.println("["+j+","+i+"]");
-                        tmpStarthMin=30;
+                        tmpStarthMin = 30;
                         tmpStartm=-1;
                         tmpEndhMax=-1;
                         tmpEndm=-1;
@@ -307,8 +307,11 @@ public class KookminCrawler extends Crawler {
             }
         }
         //classList 로그
+        /*
         for(int i=0;i<classList.size();i++){
-            System.out.println(" ["+classList.get(i).title+"] ["+classList.get(i).location+"] ["+classList.get(i).weekDay+"] ["+classList.get(i).startHour+":"+classList.get(i).startMin+"] ["+classList.get(i).endHour+":"+classList.get(i).endMin+"]");
+            Log.e("KOOKMIN"," ["+classList.get(i).title+"] ["+classList.get(i).location+"] ["+classList.get(i).weekDay+"] ["+classList.get(i).startHour+":"+classList.get(i).startMin+"] ["+classList.get(i).endHour+":"+classList.get(i).endMin+"]");
         }
+        */
     }
+
 }
